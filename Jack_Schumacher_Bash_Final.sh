@@ -13,7 +13,6 @@ clear
 # Create a directory and files variables since they are used multiple times
 mkdir -p results
 subdomain_file=results/subdomain_results.txt
-domain_file=results/domain_results.txt
 phising_prevention_file=results/phising_prevention_results.txt
 
 
@@ -48,17 +47,6 @@ if ping -c 1 -W 2 1.1.1.1 > /dev/null 2>&1; then
             echo "$ssl_results" | tee -a "$domain_file"
         fi
 
-        # Checking what other domains the owner of the domain enter owns
-        echo "Listing domains owned by the same organization:"
-        echo "Listing domains owned by the same organization:" >> "$domain_file"
-        domains_by_same_org=$(amass intel -d "$domain" -whois)
-        if [ -z "$domains_by_same_org" ];then
-            echo "No domains from the same organization found"
-            echo "No domains from the same organization found" >> "$domain_file"
-        else
-            echo "$domains_by_same_org"
-            echo "$domains_by_same_org" >> "$domain_file"
-        fi
         # List subdomains
         echo "Listing subdomains:"
         echo "Listing subdomains:" >> "$subdomain_file"
