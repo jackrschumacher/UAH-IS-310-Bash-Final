@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Installing all tools
+# Installing all tools - whois, amass, iperf3 and dnstwist
 echo "Install whois, amass, iperf3 and dnstwist"
 sudo apt install whois
 sudo snap install amass
@@ -35,9 +35,10 @@ if ping -c 1 -W 2 1.1.1.1 > /dev/null 2>&1; then
             echo "$whois_results"
             echo "$whois_results" | tee -a "$domain_file"
         fi
+
         echo "Domain legitimacy using openssl:" >> "$domain_file"
 
-        # Check openssl results for a domain recording issuer and dates- easily able to add more 
+        # Check openssl results for a domain recording issuer and dates- easily able to add more
         ssl_results=$(echo | openssl s_client -connect "$domain":443 2>/dev/null | openssl x509 -noout -dates -issuer)
         if [ -z "$ssl_results" ]; then #Check if there are any openssl results for the domain
             echo "No openssl results found"
