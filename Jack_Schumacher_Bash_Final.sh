@@ -49,7 +49,7 @@ if ping -c 1 -W 2 1.1.1.1 > /dev/null 2>&1; then
         # List subdomains
         echo "Listing subdomains:"
         echo "Listing subdomains:" >> "$subdomain_file"
-        amass enum -d "$domain" -active -src -v | tee -a "$subdomain_file"
+        amass enum -d "$domain" -active -v | tee -a "$subdomain_file"
         if [ ! -s "$subdomain_file" ];then
             echo "No subdomains found"
             echo "No subdomains found" >> "$subdomain_file"
