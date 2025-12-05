@@ -52,7 +52,7 @@ if ping -c 1 -W 2 1.1.1.1 > /dev/null 2>&1; then
         echo "Listing domains owned by the same organization:"
         echo "Listing domains owned by the same organization:" >> "$domain_file"
         domains_by_same_org=$(amass intel -d "$domain" -whois)
-        if [ -v "$domains_by_same_org" ];then
+        if [ -z "$domains_by_same_org" ];then
             echo "No domains from the same organization found"
             echo "No domains from the same organization found" >> "$domain_file"
         else
@@ -62,13 +62,10 @@ if ping -c 1 -W 2 1.1.1.1 > /dev/null 2>&1; then
         # List subdomains
         echo "Listing subdomains:"
         echo "Listing subdomains:" >> "$subdomain_file"
-        subdomains=$(amass enum -d "$domain" -active -src -v)
-        if [ -v "$subdomains" ];then
+        amass enum -d "$domain" -active -src -v | tee -a "$subdomain_file"
+        if [ ! -s "$subdomain_file" ];then
             echo "No subdomains found"
             echo "No subdomains found" >> "$subdomain_file"
-        else
-            echo "$subdomains"
-            echo "$subdomains" | tee -a "$subdomain_file"
         fi
         # Checking if there are similar domains registered that may be used in order to phish users
         echo "Checking for similar domains that may be used for phising:"
