@@ -5,6 +5,7 @@ echo "Install whois, amass and dnstwist"
 sudo apt install whois
 sudo snap install amass
 sudo apt install dnstwist
+clear
 
 
 # File vairables
@@ -17,10 +18,10 @@ phising_prevention_file=results/phising_prevention_results.txt
 # Jack Schumacher Bash Final project
 echo "Domain reconnisance tool"
 if ping -c 1 -W 2 1.1.1.1 > /dev/null 2>&1; then
-    echo "Checking network speed to ensure stability when running tool. This test will take 30 seconds."
+    echo "Checking network speed to ensure stability when running tool. This test will take 30 seconds. Press cntrl+c to cancel the test"
     iperf3 -c ping.online.net  -p 5200 -t 30
     read -p "Enter a domain to perform reconissance on: " domain
-        echo "Checking domain legitimacy using openssl"
+        echo "Checking domain legitimacy"
 
         whois_results=$(whois "$domain")
         if [ -z "$whois_results" ]; then #Check if there are any domain results
@@ -49,6 +50,7 @@ if ping -c 1 -W 2 1.1.1.1 > /dev/null 2>&1; then
             echo "No domains from the same organization found"
             echo "No domains from the same organization found" >> "$domain_file"
         else
+            echo "$domains_by_same_org"
             echo "$domains_by_same_org" >> "$domain_file"
         fi
 
@@ -59,18 +61,21 @@ if ping -c 1 -W 2 1.1.1.1 > /dev/null 2>&1; then
             echo "No subdomains found"
             echo "No subdomains found" >> "$subdomain_file"
         else
+            echo "$subdomains"
             echo "$subdomains" | tee -a "$subdomain_file"
         fi
 
-        echo "Checking for similar domains that may be used for phising"
-        echo "Checking for similar domains that may be used for phising" >> "$phising_prevention_file"
-        phising_domains=$(dnstwist "$domain")
-        if [ -v "$phising_domains" ]; then
+        echo "Checking for similar domains that may be used for phising:"
+        echo "Please wait"
+        echo "Checking for similar domains that may be used for phising:" >> "$phising_prevention_file"
+        phising_domains=$(dnstwist --registered "$domain")
+        
+        if [ -z "$phising_domains" ]; then
             echo "No possible phising domains found"
             echo "No possible phising domains found" >> "$phising_prevention_file"
         else
             echo "$phising_domains"
-            echo "phising_domains" >> "$phising_prevention_file"
+            echo "$phising_domains" >> "$phising_prevention_file"
         fi
     else
         echo "Network not connected"
