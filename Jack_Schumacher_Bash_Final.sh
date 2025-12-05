@@ -3,7 +3,6 @@
 # Installing all tools - whois, amass, iperf3 and dnstwist
 echo "Install whois, amass, iperf3 and dnstwist"
 sudo apt install whois
-sudo snap install amass
 sudo apt install dnstwist
 sudo apt install iperf3
 clear
