@@ -13,7 +13,7 @@ clear
 mkdir -p results
 subdomain_file=results/subdomain_results.txt
 phising_prevention_file=results/phising_prevention_results.txt
-
+domain_file=results/domain_results.txt
 
 # Jack Schumacher Bash Final project
 echo "Domain reconnisance tool"
